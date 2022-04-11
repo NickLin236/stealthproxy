@@ -30,9 +30,6 @@ def loadURL(url: str) -> Config:
     except InvalidPasswordError:
         raise InvalidURLError
 
-    # TODO: Verify Addr validity
-
-    # TODO: Verify Port validity
     if password:
         pass
     else:
