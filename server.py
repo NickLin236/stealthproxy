@@ -5,7 +5,7 @@ import sys
 from support.password import (InvalidPasswordError, dumpsPassword,loadsPassword, randomPassword)
 from support.serverhandle import Serverhandle as Sh
 import support.config as Fig
-import support.net as Connect
+import support.connect as Connect
 #yang guo
 #yga105@sfu.ca
 

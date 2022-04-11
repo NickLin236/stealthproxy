@@ -6,9 +6,11 @@ from threading import local
 from support.password import InvalidPasswordError, loadsPassword
 from support.localhandle import Localhandle as Lh
 import support.config  as Fig
-import support.net as Connect
+import support.connect as Connect
 #yang guo
 #yga105@sfu.ca
+
+
 
 def run_server(setting: Fig.Config):
     lop = Aio.get_event_loop()
