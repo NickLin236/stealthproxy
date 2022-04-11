@@ -2,7 +2,7 @@ from logging import *
 import socket
 from asyncio import *
 
-from cipher import Cipher
+from .cipher import Cipher
 
 flag=True
 Log1 = getLogger(__name__)
