@@ -4,7 +4,8 @@ import socket as Sc
 import asyncio
 import sys
 
-from .cipher import Cipher as Cip
+from . import net as Con
+from cipher import Cipher as Cip
 from .securesocket import SecureSocket as Ses
 
 '''
@@ -15,7 +16,7 @@ Connection = Sc.socket
 logger = logging.getLogger(__name__)
 
 
-class Serverhandle(Ses):
+class LsServer(Ses):
     def __init__(self,loop,password,listenAddr):
         #loop=asyncio.AbstractEventLoop loop
         #password: bytearray

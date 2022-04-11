@@ -2,10 +2,11 @@ import argparse as Argp
 import asyncio as Aio
 import sys
 
-from support.password import (InvalidPasswordError, dumpsPassword,loadsPassword, randomPassword)
-from support.serverhandle import Serverhandle as Sh
-import support.config as Fig
-import support.connect as Connect
+from support.password import (InvalidPasswordError, dumpsPassword,
+                                      loadsPassword, randomPassword)
+from support.server import LsServer as LSS
+from support import config as Fig
+from support import net as Connect
 #yang guo
 #yga105@sfu.ca
 
@@ -16,13 +17,14 @@ def run_server(Setting):
     sevPot=Setting.serverPort
     pwd=Setting.password
     ldr = Connect.Address(sevAdr, sevPot)
-    sev = Sh(loop=lop, password=pwd, listenAddr=ldr)
+    sev = LSS(loop=lop, password=pwd, listenAddr=ldr)
     print('server address is '+ sevAdr)
     print('replace 127.0.0.1 with actual hostname if connected in internet\n')
     print('''python3 local.py -u "http://127.0.0.1:8388/#'''f'''{dumpsPassword(Setting.password)}"''')
-    def listening():
-        print('listening')
-    Aio.ensure_future(sev.listen(listening))
+    print('\n Setting local')
+    def Listening(address):
+        print("listening")
+    Aio.ensure_future(sev.listen(Listening))
     lop.run_forever()
 
 

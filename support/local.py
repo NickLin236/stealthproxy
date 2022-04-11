@@ -3,6 +3,8 @@ import socket as Sc
 import asyncio
 import sys
 import logging
+
+from . import net as Con
 from .cipher import Cipher as Cip
 from .securesocket import SecureSocket as Ses
 
@@ -14,7 +16,7 @@ Connection = Sc.socket
 logger = logging.getLogger(__name__)
 
 
-class Localhandle(Ses):
+class LsLocal(Ses):
     def __init__(self, loop, password, listenAddr, remoteAddr):
         # loop : asyncio.AbstractEventLoop
         # password : bytearray
@@ -80,6 +82,10 @@ class Localhandle(Ses):
             else:
                 sys.exit
             await self.loop.sock_connect(remoteConn, self.remoteAddr)
-        except Exception as error:
-            raise ConnectionError('Connect to remote server %s:%d fail:\n%r' % (*self.remoteAddr, error))
+        except Exception as err:
+            rec=remoteConn
+            adr=self.remoteAddr
+            err_str=str(err)
+            error_msg = "Connection fail"+err_str
+            raise ConnectionError(error_msg)
         return remoteConn

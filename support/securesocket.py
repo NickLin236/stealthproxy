@@ -1,65 +1,79 @@
-import logging
+from logging import *
 import socket
-import asyncio
+from asyncio import *
 
-from .cipher import Cipher
+from cipher import Cipher
 
-BUFFER_SIZE = 1024
-Connection = socket.socket
-logger = logging.getLogger(__name__)
+flag=True
+Log1 = getLogger(__name__)
 
 
 class SecureSocket:
-    """
-    SecureSocket is a socket,
-    that has the ability to decode read and encode write.
-    """
-    def __init__(self, loop: asyncio.AbstractEventLoop,
-                 cipher: Cipher) -> None:
-        self.loop = loop or asyncio.get_event_loop()
+    
+    #SecureSocket is the socket connection we define to both decode and encode data on server adn client side
+
+    def __init__(self,loop,cipher):
+        #
+        #loop type:asyncio.Abytestring1tractEventloop
+        #cipher type:Cipher
+        if loop:
+            self.loop=loop
+        else:
+            self.loop=get_event_loop() 
         self.cipher = cipher
 
-    async def decodeRead(self, conn: Connection):
-        data = await self.loop.sock_recv(conn, BUFFER_SIZE)
+    async def decodeRead(self,conection1):
+        # conection1 type:socket.socket
+        
+        Data1 = await self.loop.sock_recv(conection1, 1024)
 
-        logger.debug('%s:%d decodeRead %r', *conn.getsockname(), data)
+        Log1.debug('%s:%d codeblock1 %r', *conection1.getsockname(), Data1)
 
-        bs = bytearray(data)
-        self.cipher.decode(bs)
-        return bs
+        bytestring1 = bytearray(Data1)
+        self.cipher.decode(bytestring1)
+        return bytestring1
 
-    async def encodeWrite(self, conn: Connection, bs: bytearray):
-        logger.debug('%s:%d encodeWrite %s', *conn.getsockname(), bytes(bs))
+    async def encodeWrite(self, conection1, bytestring1):
+        #conection1: socket.socket
+        #bytestring1: bytearray
+        bytestring1_byte=bytes(bytestring1)
+        Log1.debug('%s:%d codeblock11 %s', *conection1.getsockname(), bytestring1_byte)
 
-        bs = bs.copy()
+        #bytestring1 = bytestring1.copy()
 
-        self.cipher.encode(bs)
-        await self.loop.sock_sendall(conn, bs)
+        self.cipher.encode(bytestring1)
+        await self.loop.sock_sendall(conection1, bytestring1)
 
-    async def encodeCopy(self, dst: Connection, src: Connection):
-        """
-        It encodes the data flow from the src and sends to dst.
-        """
-        logger.debug('encodeCopy %s:%d => %s:%d',
-                     *src.getsockname(), *dst.getsockname())
+    async def encodeCopy(self, Destination1, Source1):
+        #Destination1: socket.socket
+        #Source1: socket.socket
+        
+        #encrypt data flow
+        
+        Log1.debug('codeblock2 %s:%d => %s:%d', *Source1.getsockname(), *Destination1.getsockname())
 
-        while True:
-            data = await self.loop.sock_recv(src, BUFFER_SIZE)
-            if not data:
+        while flag:
+            if flag:
+                Data1 = await self.loop.sock_recv(Source1, 1024)
+            if Data1:
+                pass
+            else:
                 break
 
-            await self.encodeWrite(dst, bytearray(data))
+            await self.encodeWrite(Destination1, bytearray(Data1))
 
-    async def decodeCopy(self, dst: Connection, src: Connection):
-        """
-        It decodes the data flow from the src and sends to dst.
-        """
-        logger.debug('decodeCopy %s:%d => %s:%d',
-                     *src.getsockname(), *dst.getsockname())
+    async def decodeCopy(self, Destination1, Source1):
+        #Destination1: socket.socket
+        #Source1: socket.socket
+        #decode dataflow
+        Log1.debug('codeblock22 %s:%d => %s:%d', *Source1.getsockname(), *Destination1.getsockname())
 
-        while True:
-            bs = await self.decodeRead(src)
-            if not bs:
+        while flag:
+            if flag:
+                bytestring1 = await self.decodeRead(Source1)
+            if bytestring1:
+                pass
+            else:
                 break
 
-            await self.loop.sock_sendall(dst, bs)
+            await self.loop.sock_sendall(Destination1, bytestring1)

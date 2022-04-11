@@ -2,6 +2,8 @@ class Cipher:
     def __init__(self, encodePassword,decodePassword):
         self.encodePassword = encodePassword.copy()
         self.decodePassword = decodePassword.copy()
+        #print(self.encodePassword)
+        #print(self.decodePassword)
 
     def encode(self, bs):
         i=0
@@ -23,5 +25,5 @@ class Cipher:
             v=encodePassword[i]
             decodePassword[v] = i
             i += 1
-        return cls
+        return cls(encodePassword, decodePassword)
 

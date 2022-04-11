@@ -4,13 +4,11 @@ import sys
 from threading import local
 
 from support.password import InvalidPasswordError, loadsPassword
-from support.localhandle import Localhandle as Lh
-import support.config  as Fig
-import support.connect as Connect
+from support.local import LsLocal as LSL
+from support import config as Fig
+from support import net as Connect
 #yang guo
 #yga105@sfu.ca
-
-
 
 def run_server(setting: Fig.Config):
     lop = Aio.get_event_loop()
@@ -22,12 +20,13 @@ def run_server(setting: Fig.Config):
 
     ldr = Connect.Address(locAdr, locPort)
     rdr = Connect.Address(servAddr,servPort)
-    sev = Lh(loop=lop,password=passwd,listenAddr=ldr,remoteAddr=rdr)
+    sev = LSL(loop=lop,password=passwd,listenAddr=ldr,remoteAddr=rdr)
     if ldr:
         if locPort:
             print('Listen to %s:%d\n' % (locAdr,locPort))
     def Listening(address):
         print("listening")
+
     Aio.ensure_future(sev.listen(Listening))
     lop.run_forever()
 
