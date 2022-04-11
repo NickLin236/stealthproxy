@@ -1,7 +1,7 @@
 class Cipher:
     def __init__(self, encodePassword,decodePassword):
-        self.encodePassword = encodePassword
-        self.decodePassword = decodePassword
+        self.encodePassword = encodePassword.copy()
+        self.decodePassword = decodePassword.copy()
 
     def encode(self, bs):
         i=0
