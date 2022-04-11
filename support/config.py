@@ -3,7 +3,7 @@ import typing
 from collections import namedtuple
 from urllib.parse import urlparse
 
-from password import (InvalidPasswordError, dumpsPassword,loadsPassword)
+from .password import (InvalidPasswordError, dumpsPassword,loadsPassword)
 
 Config = namedtuple('Config','serverAddr serverPort localAddr localPort password')
 

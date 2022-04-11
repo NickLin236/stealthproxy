@@ -24,11 +24,9 @@ def run_server(setting: Fig.Config):
     if ldr:
         if locPort:
             print('Listen to %s:%d\n' % (locAdr,locPort))
-    #def didListen(address):
-    #    print('Listen to %s:%d\n' % address)
-
-    #Aio.ensure_future(sev.listen(didListen))
-    Aio.ensure_future(sev.listen())
+    def Listening(address):
+        print("listening")
+    Aio.ensure_future(sev.listen(Listening))
     lop.run_forever()
 
 

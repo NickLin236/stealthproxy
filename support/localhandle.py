@@ -4,9 +4,9 @@ import asyncio
 import sys
 import logging
 
-import net as Con
-from cipher import Cipher as Cip
-from securesocket import SecureSocket as Ses
+from . import net as Con
+from .cipher import Cipher as Cip
+from .securesocket import SecureSocket as Ses
 
 '''
     First we need to make a socket connection and logger.

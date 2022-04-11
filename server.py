@@ -19,10 +19,10 @@ def run_server(Setting):
     sev = Sh(loop=lop, password=pwd, listenAddr=ldr)
     print('server address is '+ sevAdr)
     print('replace 127.0.0.1 with actual hostname if connected in internet\n')
-    print('''python3 lslocal.py -u "http://127.0.0.1:8388/#'''f'''{dumpsPassword(Setting.password)}"''')
-    print('\n Setting lslocal')
-
-    Aio.ensure_future(sev.listen())
+    print('''python3 local.py -u "http://127.0.0.1:8388/#'''f'''{dumpsPassword(Setting.password)}"''')
+    def listening():
+        print('listening')
+    Aio.ensure_future(sev.listen(listening))
     lop.run_forever()
 
 

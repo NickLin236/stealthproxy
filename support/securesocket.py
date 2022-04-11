@@ -2,7 +2,7 @@ import logging
 import socket
 import asyncio
 
-from cipher import Cipher
+from .cipher import Cipher
 
 BUFFER_SIZE = 1024
 Connection = socket.socket
