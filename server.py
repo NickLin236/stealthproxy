@@ -1,12 +1,10 @@
 import argparse as Argp
 import asyncio as Aio
 import sys
-
-from support.password import (InvalidPasswordError, dumpsPassword,
-                                      loadsPassword, randomPassword)
-from support.server import LsServer as LSS
 from support import config as Fig
 from support import net as Connect
+from support.password import (InvalidPasswordError, dumpsPassword,loadsPassword, randomPassword)
+from support.serverhandle import Serverhandle as Sh
 #yang guo
 #yga105@sfu.ca
 
@@ -17,55 +15,37 @@ def run_server(Setting):
     sevPot=Setting.serverPort
     pwd=Setting.password
     ldr = Connect.Address(sevAdr, sevPot)
-    sev = LSS(loop=lop, password=pwd, listenAddr=ldr)
+    sev = Sh(loop=lop, password=pwd, listenAddr=ldr)
     print('server address is '+ sevAdr)
-    print('replace 127.0.0.1 with actual hostname if connected in internet\n')
+    print('replace 127.0.0.1 with actual hostname if connected in internet\n\n')
     print('''python3 local.py -u "http://127.0.0.1:8388/#'''f'''{dumpsPassword(Setting.password)}"''')
-    print('\n Setting local')
     def Listening(address):
-        print("listening")
+        print("\n\nlistening")
     Aio.ensure_future(sev.listen(Listening))
     lop.run_forever()
 
 
 def main():
     struct = Argp.ArgumentParser(description='shadowsocks implements server')
-    struct.add_argument('--version',action='store_true',default=False,help='show version information')
 
-    options = struct.add_argument_group('Proxy options')
-    option1=options.add_argument('--save', metavar='Setting', help='save setting')
-    option2=options.add_argument('-c', metavar='Setting', help='setting files location')
+
+    options=struct.add_argument_group('Proxy options')
     option3=options.add_argument('-s', metavar='SERVER_ADDR', help='the address server listen to, default: 0.0.0.0')
     option4=options.add_argument('-p',metavar='SERVER_PORT',type=int,help='the port listen to, shadowsocks server use 8388 in default')
     option5=options.add_argument('-k', metavar='PASSWORD', help='password')
     option6=options.add_argument('--random',action='store_true',default=False,help='initialize a random password')
 
     args = struct.parse_args()
-    GetVersion=args.version
-    Getconfig=args.c
+    
+
     GetServerAddr=args.s
     GetServerPort=args.p
     GetPassword=args.k
-    GetSave=args.save
     GetRando=args.random
     NoRando=not GetRando
-    if GetVersion:
-        print('shadowsock implements')
-        sys.exit(0)
+
 
     Setting = Fig.Config(None, None, None, None, None)
-    if Getconfig:
-        try:
-            with open(Getconfig, encoding='utf-8') as file1:
-                file_Setting = Fig.load(file1)
-        except: 
-            usage1=struct.print_usage()
-            if Fig.InvalidFileError:
-                print(f'setting file error:{Getconfig!r}') 
-            if FileNotFoundError:
-                print(f'Setting file {Getconfig!r} does not exist')
-            sys.exit(1)
-        Setting = Setting._replace(**file_Setting._asdict())
 
     if GetServerAddr:
         Setting = Setting._replace(serverAddr=GetServerAddr)
@@ -97,11 +77,6 @@ def main():
     if GetRando:
         print('randomly initial with a password')
         Setting = Setting._replace(password=randomPassword())
-
-    if GetSave:
-        print(f'Setting is save to {GetSave!r}')
-        with open(GetSave, 'w', encoding='utf-8') as file2:
-            Fig.dump(file2, Setting)
 
     run_server(Setting)
 

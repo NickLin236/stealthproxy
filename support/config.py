@@ -13,12 +13,6 @@ class InvalidURLError(Exception):
     """Invalid config URL"""
     print ("Invalid config URL")
 
-
-class InvalidFileError(Exception):
-    """Invalid configuration file"""
-    print ("Invalid configuration file")
-
-
 def loadURL(url: str) -> Config:
     par = urlparse(url)
     url = par
@@ -89,29 +83,3 @@ def loads(string):
 
     return config
 
-
-def dump(f, config):
-    # f: typing.TextIO
-    # config: Config
-    config = config._replace(password=dumpsPassword(config.password))
-
-    json.dump(config._asdict(), f, indent=2)
-
-
-def load(f):
-    # f: typing.TextIO
-    try:
-        da = json.load(f)
-        data = da
-        conf = Config(**data)
-        config = conf
-
-        config = config._replace(password=loadsPassword(config.password))
-
-        # TODO: Verify Addr validity
-
-        # TODO: Verify Port validity
-    except Exception:
-        raise InvalidFileError
-
-    return config

@@ -16,7 +16,7 @@ Connection = Sc.socket
 logger = logging.getLogger(__name__)
 
 
-class LsServer(Ses):
+class Serverhandle(Ses):
     def __init__(self,loop,password,listenAddr):
         #loop=asyncio.AbstractEventLoop loop
         #password: bytearray
